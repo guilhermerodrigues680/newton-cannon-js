@@ -122,6 +122,15 @@ const cannonball = {
 };
 
 async function renderLoop(timestamp) {
+  const CONSTANTE_GRAVITACIONAL = 6.74e-11;
+  const m1 = 1;
+  const m2 = 2000;
+  const dM1M2 = 100;
+  const f = CONSTANTE_GRAVITACIONAL * ((m1 * m2) / (dM1M2 * dM1M2));
+  // f = m*a
+  // a = f/m
+  const a = f / m1;
+  console.debug(f, a);
   console.debug(cannonball.x, cannonball.y);
   cc.drawCircle(cannonball.x, cannonball.y, 20);
 
@@ -133,7 +142,7 @@ async function renderLoop(timestamp) {
   cannonball.y = cannonball.y + cannonball.vSpeed;
 
   await sleep(100);
-  window.requestAnimationFrame(renderLoop);
+  // window.requestAnimationFrame(renderLoop);
 }
 
 async function initialRender() {
