@@ -68,15 +68,75 @@ class CanvasCartesian {
   fillText(txt, x, y) {
     this._ctx.fillText(txt, this._cctccsX(x), this._cctccsY(y));
   }
+
+  async useImage(imgSrc, x0, y0, x1 = null, y1 = null) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        if (x1 == null && y1 == null) {
+          this._ctx.drawImage(img, this._cctccsX(x0), this._cctccsY(y0));
+        } else {
+          this._ctx.drawImage(
+            img,
+            this._cctccsX(x0),
+            this._cctccsY(y0),
+            x1,
+            -y1
+          );
+        }
+        resolve();
+      };
+
+      img.onerror = reject;
+      img.src = imgSrc;
+    });
+  }
+
+  drawCircle(x, y, radius) {
+    this._ctx.beginPath();
+    this._ctx.arc(
+      this._cctccsX(x),
+      this._cctccsY(y),
+      radius,
+      0,
+      Math.PI * 2,
+      true
+    );
+    this._ctx.fill();
+  }
 }
 
-async function init() {
-  /** @type {HTMLCanvasElement} */
-  const canvasEl = document.getElementById("canvas");
-  canvasEl.width = window.innerWidth;
-  canvasEl.height = window.innerHeight;
+/** @type {HTMLCanvasElement} */
+const canvasEl = document.getElementById("canvas");
+canvasEl.width = window.innerWidth;
+canvasEl.height = window.innerHeight;
+const cc = new CanvasCartesian(canvasEl);
 
-  const cc = new CanvasCartesian(canvasEl);
+const cannonball = {
+  x: 0,
+  y: 220,
+  hSpeed: 1,
+  vSpeed: -1,
+  hAcceleration: 0.01,
+  vAcceleration: 0.1,
+};
+
+async function renderLoop(timestamp) {
+  console.debug(cannonball.x, cannonball.y);
+  cc.drawCircle(cannonball.x, cannonball.y, 20);
+
+  cannonball.hSpeed =
+    cannonball.hSpeed + cannonball.hSpeed * cannonball.hAcceleration;
+  cannonball.vSpeed =
+    cannonball.vSpeed + cannonball.vSpeed * cannonball.vAcceleration;
+  cannonball.x = cannonball.x + cannonball.hSpeed;
+  cannonball.y = cannonball.y + cannonball.vSpeed;
+
+  await sleep(100);
+  window.requestAnimationFrame(renderLoop);
+}
+
+async function initialRender() {
   cc.fillRect(0, 0, 10, 10);
 
   // Eixo X
@@ -96,11 +156,8 @@ async function init() {
   );
 
   const step = 20;
-  // const delay = 100;
-  const delay = 50;
 
   for (let i = step; i < cc.coords.maxX || i < cc.coords.maxY; i += step) {
-    await sleep(delay);
     if (i < cc.coords.maxX) {
       cc.drawLine(i, cc.coords.minY, i, cc.coords.maxY);
       cc.fillText(i, i, cc.coords.centerY);
@@ -115,6 +172,9 @@ async function init() {
       cc.fillText(-i, cc.coords.centerX, -i);
     }
   }
+
+  await cc.useImage("assets/earth.png", -200, -200, 400, 400);
+  window.requestAnimationFrame(renderLoop);
 }
 
-init();
+initialRender();
