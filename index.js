@@ -95,8 +95,11 @@ class CanvasCartesian {
 
 /** @type {HTMLCanvasElement} */
 const canvasEl = document.getElementById("canvas");
-canvasEl.width = window.innerWidth;
-canvasEl.height = window.innerHeight;
+// canvasEl.width = window.innerWidth;
+// canvasEl.height = window.innerHeight;
+
+canvasEl.height = 1080;
+canvasEl.width = Math.floor((window.innerWidth / window.innerHeight) * canvasEl.height);
 const cc = new CanvasCartesian(canvasEl);
 const animateConstrol = {
   playing: true,
