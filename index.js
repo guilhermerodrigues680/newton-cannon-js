@@ -76,13 +76,7 @@ class CanvasCartesian {
         if (x1 == null && y1 == null) {
           this._ctx.drawImage(img, this._cctccsX(x0), this._cctccsY(y0));
         } else {
-          this._ctx.drawImage(
-            img,
-            this._cctccsX(x0),
-            this._cctccsY(y0),
-            x1,
-            -y1
-          );
+          this._ctx.drawImage(img, this._cctccsX(x0), this._cctccsY(y0), x1, -y1);
         }
         resolve();
       };
@@ -94,14 +88,7 @@ class CanvasCartesian {
 
   drawCircle(x, y, radius) {
     this._ctx.beginPath();
-    this._ctx.arc(
-      this._cctccsX(x),
-      this._cctccsY(y),
-      radius,
-      0,
-      Math.PI * 2,
-      true
-    );
+    this._ctx.arc(this._cctccsX(x), this._cctccsY(y), radius, 0, Math.PI * 2, true);
     this._ctx.fill();
   }
 }
@@ -138,12 +125,7 @@ async function renderLoop(timestamp) {
 
   // CALCS
   const d = calcDistanceBetweenTwoPoints(cannonball.x, cannonball.y, 0, 0);
-  const dy = calcDistanceBetweenTwoPoints(
-    cannonball.x,
-    cannonball.y,
-    cannonball.x,
-    0
-  );
+  const dy = calcDistanceBetweenTwoPoints(cannonball.x, cannonball.y, cannonball.x, 0);
   const dx = calcDistanceBetweenTwoPoints(cannonball.x, 0, 0, 0);
   const o = Math.atan(dx / dy);
 
@@ -161,10 +143,8 @@ async function renderLoop(timestamp) {
   console.debug(cannonball.x, cannonball.y);
   cc.drawCircle(cannonball.x, cannonball.y, 20);
 
-  cannonball.hSpeed =
-    cannonball.hSpeed + cannonball.hSpeed * cannonball.hAcceleration;
-  cannonball.vSpeed =
-    cannonball.vSpeed + cannonball.vSpeed * cannonball.vAcceleration;
+  cannonball.hSpeed = cannonball.hSpeed + cannonball.hSpeed * cannonball.hAcceleration;
+  cannonball.vSpeed = cannonball.vSpeed + cannonball.vSpeed * cannonball.vAcceleration;
   cannonball.x = cannonball.x + cannonball.hSpeed;
   cannonball.y = cannonball.y + cannonball.vSpeed;
 
@@ -176,20 +156,10 @@ async function initialRender() {
   cc.fillRect(0, 0, 10, 10);
 
   // Eixo X
-  cc.drawLine(
-    cc.coords.minX,
-    cc.coords.centerY,
-    cc.coords.maxX,
-    cc.coords.centerY
-  );
+  cc.drawLine(cc.coords.minX, cc.coords.centerY, cc.coords.maxX, cc.coords.centerY);
 
   // Eixo Y
-  cc.drawLine(
-    cc.coords.centerX,
-    cc.coords.minY,
-    cc.coords.centerX,
-    cc.coords.maxY
-  );
+  cc.drawLine(cc.coords.centerX, cc.coords.minY, cc.coords.centerX, cc.coords.maxY);
 
   const step = 20;
 
