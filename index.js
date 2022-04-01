@@ -105,7 +105,7 @@ const animateConstrol = {
 const cannonball = {
   x: 0,
   y: 250,
-  hSpeed: 1,
+  hSpeed: 2.3,
   vSpeed: 0,
   hAcceleration: 0,
   vAcceleration: 0,
@@ -163,8 +163,23 @@ async function renderLoop(timestamp) {
   console.debug(cannonball.x, cannonball.y);
   cc.drawCircle(cannonball.x, cannonball.y, 20);
 
-  cannonball.hAcceleration = fx;
-  cannonball.vAcceleration = -fy;
+  if (cannonball.x > 0 && cannonball.y > 0) {
+    cannonball.hAcceleration = -fx;
+    cannonball.vAcceleration = -fy;
+  } else if (cannonball.x < 0 && cannonball.y > 0) {
+    cannonball.hAcceleration = fx;
+    cannonball.vAcceleration = -fy;
+  } else if (cannonball.x < 0 && cannonball.y < 0) {
+    cannonball.hAcceleration = fx;
+    cannonball.vAcceleration = fy;
+  } else if (cannonball.x > 0 && cannonball.y < 0) {
+    cannonball.hAcceleration = -fx;
+    cannonball.vAcceleration = fy;
+  } else {
+    // tudo zero
+    console.debug("Tudo zero");
+  }
+
   cannonball.hSpeed = cannonball.hSpeed + cannonball.hAcceleration;
   cannonball.vSpeed = cannonball.vSpeed + cannonball.vAcceleration;
   cannonball.x = cannonball.x + cannonball.hSpeed;
