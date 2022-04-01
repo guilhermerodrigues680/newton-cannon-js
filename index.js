@@ -100,8 +100,8 @@ canvasEl.height = window.innerHeight;
 const cc = new CanvasCartesian(canvasEl);
 
 const cannonball = {
-  x: -300,
-  y: -100,
+  x: -100,
+  y: -10,
   hSpeed: 0,
   vSpeed: 0,
   hAcceleration: 0,
@@ -110,6 +110,13 @@ const cannonball = {
 
 function calcDistanceBetweenTwoPoints(x0, y0, x1, y1) {
   return Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
+}
+
+function calcAngBetweenTwoVectors(x0, y0, x1, y1) {
+  return Math.acos(
+    (x0 * x1 + y0 * y1) /
+      (Math.sqrt(Math.pow(x0, 2) + Math.pow(y0, 2)) * Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2)))
+  );
 }
 
 async function renderLoop(timestamp) {
@@ -137,6 +144,12 @@ async function renderLoop(timestamp) {
   console.debug("|dx|", dx);
   console.debug("|o|", o, o * (180 / Math.PI));
   console.debug("f", f, "fx", fx, "fy", fy);
+
+  console.debug(
+    "calcAngBetweenTwoVectors",
+    calcAngBetweenTwoVectors(cannonball.x, cannonball.y, 1, 0),
+    calcAngBetweenTwoVectors(cannonball.x, cannonball.y, 1, 0) * (180 / Math.PI)
+  );
 
   ///
 
