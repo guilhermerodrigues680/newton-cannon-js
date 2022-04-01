@@ -113,13 +113,17 @@ canvasEl.height = window.innerHeight;
 const cc = new CanvasCartesian(canvasEl);
 
 const cannonball = {
-  x: 0,
-  y: 220,
-  hSpeed: 1,
-  vSpeed: -1,
-  hAcceleration: 0.01,
-  vAcceleration: 0.1,
+  x: -300,
+  y: -100,
+  hSpeed: 0,
+  vSpeed: 0,
+  hAcceleration: 0,
+  vAcceleration: 0,
 };
+
+function calcDistanceBetweenTwoPoints(x0, y0, x1, y1) {
+  return Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
+}
 
 async function renderLoop(timestamp) {
   const CONSTANTE_GRAVITACIONAL = 6.74e-11;
@@ -131,6 +135,29 @@ async function renderLoop(timestamp) {
   // a = f/m
   const a = f / m1;
   console.debug(f, a);
+
+  // CALCS
+  const d = calcDistanceBetweenTwoPoints(cannonball.x, cannonball.y, 0, 0);
+  const dy = calcDistanceBetweenTwoPoints(
+    cannonball.x,
+    cannonball.y,
+    cannonball.x,
+    0
+  );
+  const dx = calcDistanceBetweenTwoPoints(cannonball.x, 0, 0, 0);
+  const o = Math.atan(dx / dy);
+
+  const fx = f * Math.sin(o);
+  const fy = f * Math.cos(o);
+
+  console.debug("|d|", d);
+  console.debug("|dy|", dy);
+  console.debug("|dx|", dx);
+  console.debug("|o|", o, o * (180 / Math.PI));
+  console.debug("f", f, "fx", fx, "fy", fy);
+
+  ///
+
   console.debug(cannonball.x, cannonball.y);
   cc.drawCircle(cannonball.x, cannonball.y, 20);
 
