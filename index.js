@@ -96,9 +96,9 @@ class CanvasCartesian {
 /** @type {HTMLCanvasElement} */
 const canvasEl = document.getElementById("canvas");
 // canvasEl.width = window.innerWidth;
-// canvasEl.height = window.innerHeight;
+canvasEl.height = window.innerHeight;
 
-canvasEl.height = 1080;
+// canvasEl.height = 10000;
 canvasEl.width = Math.floor((window.innerWidth / window.innerHeight) * canvasEl.height);
 const cc = new CanvasCartesian(canvasEl);
 const animateConstrol = {
@@ -195,31 +195,31 @@ async function renderLoop(timestamp) {
 }
 
 async function initialRender() {
-  cc.fillRect(0, 0, 10, 10);
+  // cc.fillRect(0, 0, 10, 10);
 
-  // Eixo X
-  cc.drawLine(cc.coords.minX, cc.coords.centerY, cc.coords.maxX, cc.coords.centerY);
+  // // Eixo X
+  // cc.drawLine(cc.coords.minX, cc.coords.centerY, cc.coords.maxX, cc.coords.centerY);
 
-  // Eixo Y
-  cc.drawLine(cc.coords.centerX, cc.coords.minY, cc.coords.centerX, cc.coords.maxY);
+  // // Eixo Y
+  // cc.drawLine(cc.coords.centerX, cc.coords.minY, cc.coords.centerX, cc.coords.maxY);
 
-  const step = 20;
+  // const step = 20;
 
-  for (let i = step; i < cc.coords.maxX || i < cc.coords.maxY; i += step) {
-    if (i < cc.coords.maxX) {
-      cc.drawLine(i, cc.coords.minY, i, cc.coords.maxY);
-      cc.fillText(i, i, cc.coords.centerY);
-      cc.drawLine(-i, cc.coords.minY, -i, cc.coords.maxY);
-      cc.fillText(-i, -i, cc.coords.centerY);
-    }
+  // for (let i = step; i < cc.coords.maxX || i < cc.coords.maxY; i += step) {
+  //   if (i < cc.coords.maxX) {
+  //     cc.drawLine(i, cc.coords.minY, i, cc.coords.maxY);
+  //     cc.fillText(i, i, cc.coords.centerY);
+  //     cc.drawLine(-i, cc.coords.minY, -i, cc.coords.maxY);
+  //     cc.fillText(-i, -i, cc.coords.centerY);
+  //   }
 
-    if (i < cc.coords.maxY) {
-      cc.drawLine(cc.coords.minX, i, cc.coords.maxX, i);
-      cc.fillText(i, cc.coords.centerX, i);
-      cc.drawLine(cc.coords.minX, -i, cc.coords.maxX, -i);
-      cc.fillText(-i, cc.coords.centerX, -i);
-    }
-  }
+  //   if (i < cc.coords.maxY) {
+  //     cc.drawLine(cc.coords.minX, i, cc.coords.maxX, i);
+  //     cc.fillText(i, cc.coords.centerX, i);
+  //     cc.drawLine(cc.coords.minX, -i, cc.coords.maxX, -i);
+  //     cc.fillText(-i, cc.coords.centerX, -i);
+  //   }
+  // }
 
   await cc.useImage("assets/earth.png", -200, -200, 400, 400);
   window.requestAnimationFrame(renderLoop);
