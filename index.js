@@ -98,11 +98,14 @@ const canvasEl = document.getElementById("canvas");
 canvasEl.width = window.innerWidth;
 canvasEl.height = window.innerHeight;
 const cc = new CanvasCartesian(canvasEl);
+const animateConstrol = {
+  playing: true,
+};
 
 const cannonball = {
-  x: -100,
-  y: -10,
-  hSpeed: 0,
+  x: 0,
+  y: 250,
+  hSpeed: 1,
   vSpeed: 0,
   hAcceleration: 0,
   vAcceleration: 0,
@@ -120,11 +123,15 @@ function calcAngBetweenTwoVectors(x0, y0, x1, y1) {
 }
 
 async function renderLoop(timestamp) {
+  if (!animateConstrol.playing) {
+    return;
+  }
+
   const CONSTANTE_GRAVITACIONAL = 6.74e-11;
   const m1 = 1;
-  const m2 = 2000;
-  const dM1M2 = 100;
-  const f = CONSTANTE_GRAVITACIONAL * ((m1 * m2) / (dM1M2 * dM1M2));
+  const m2 = 20000000000000;
+  const dM1M2 = calcDistanceBetweenTwoPoints(cannonball.x, cannonball.y, 0, 0);
+  const f = CONSTANTE_GRAVITACIONAL * ((m1 * m2) / Math.pow(dM1M2, 2));
   // f = m*a
   // a = f/m
   const a = f / m1;
@@ -156,13 +163,17 @@ async function renderLoop(timestamp) {
   console.debug(cannonball.x, cannonball.y);
   cc.drawCircle(cannonball.x, cannonball.y, 20);
 
-  cannonball.hSpeed = cannonball.hSpeed + cannonball.hSpeed * cannonball.hAcceleration;
-  cannonball.vSpeed = cannonball.vSpeed + cannonball.vSpeed * cannonball.vAcceleration;
+  cannonball.hAcceleration = fx;
+  cannonball.vAcceleration = -fy;
+  cannonball.hSpeed = cannonball.hSpeed + cannonball.hAcceleration;
+  cannonball.vSpeed = cannonball.vSpeed + cannonball.vAcceleration;
   cannonball.x = cannonball.x + cannonball.hSpeed;
   cannonball.y = cannonball.y + cannonball.vSpeed;
 
+  console.debug("speed", cannonball.hSpeed, cannonball.vSpeed);
+
   await sleep(100);
-  // window.requestAnimationFrame(renderLoop);
+  window.requestAnimationFrame(renderLoop);
 }
 
 async function initialRender() {
@@ -195,5 +206,17 @@ async function initialRender() {
   await cc.useImage("assets/earth.png", -200, -200, 400, 400);
   window.requestAnimationFrame(renderLoop);
 }
+
+const btnPlay = document.getElementById("btn-play");
+const btnPause = document.getElementById("btn-pause");
+
+btnPlay.addEventListener("click", () => {
+  animateConstrol.playing = true;
+  window.requestAnimationFrame(renderLoop);
+});
+
+btnPause.addEventListener("click", () => {
+  animateConstrol.playing = false;
+});
 
 initialRender();

@@ -16,3 +16,11 @@ body {
   height: 100%;
   margin: 0;
 }
+
+.control {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  margin: 10px 0 0 10px;
+}
